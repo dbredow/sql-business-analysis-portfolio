@@ -1,4 +1,4 @@
-Create View 02_vw_uw_claim_detail as 
+Create View 02_vw_uw_claim_financials as 
 with ClaimTransactionCalc as (
 	select
 		Claimid,
