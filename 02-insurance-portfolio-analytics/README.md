@@ -167,3 +167,11 @@ The project will be considered complete when it contains:
 
 The project will develop incrementally, with decisions, scripts, tests and supporting documentation maintained in this repository.
 
+---
+
+## Power BI Dashboard — Executive Summary
+
+The executive dashboard provides an overview of underwriting performance across the 2024–2026 portfolio.
+
+![Executive Summary Dashboard](powerbi/screenshots/executive-summary.png)
+
