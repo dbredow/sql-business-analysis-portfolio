@@ -173,5 +173,5 @@ The project will develop incrementally, with decisions, scripts, tests and suppo
 
 The executive dashboard provides an overview of underwriting performance across the 2024–2026 portfolio.
 
-![Executive Summary Dashboard](powerbi/screenshots/executive-summary.png)
+![Executive Summary Dashboard](powerbi/screenshots/Executive%20Summary.PNG)
 
