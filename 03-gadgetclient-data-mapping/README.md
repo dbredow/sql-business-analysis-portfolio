@@ -126,4 +126,4 @@ Only synthetic or anonymised sample data should be used in demonstrations.
 
 The supplied Python file was reviewed and corrected for syntax and several integration issues. It passes Python bytecode compilation. Full runtime and business-rule testing has **not** been completed because the companion `client_db_v15.py` module, Client Admin GUI source and representative synthetic test files were not supplied.
 
-See [`docs/technical-review.md`](docs/technical-review.md) for the review findings and outstanding work.
+See [`docs/technical-review.md`](documents/technical-review.md) for the review findings and outstanding work.
