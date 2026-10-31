@@ -1,48 +1,87 @@
-# SQL & Business Analysis Portfolio
+# Business Analysis & Data Portfolio
 
 ## About This Portfolio
 
-Welcome to my SQL portfolio, showcasing my development in SQL, database management, data quality, and business-focused data analysis.
+Welcome to my portfolio, showcasing practical work across business analysis, database design, data management, process improvement and data analytics.
 
-As a Business Analyst, I am developing my technical skills to translate business requirements into clear, accurate, and meaningful data solutions.
+As a Business Analyst working within the insurance sector, I am particularly interested in how business requirements can be translated into well-designed data solutions, effective processes and meaningful management information.
 
-This portfolio demonstrates not only how I write SQL, but also how I interpret business questions, develop query logic, validate results, and communicate findings.
+The projects in this portfolio demonstrate a combination of business and technical skills, including requirements analysis, process design, data modelling, SQL development, data validation and solution design.
 
-## Skills & Areas of Focus
-
-- SQL query development and problem-solving
-- Joins, Common Table Expressions (CTEs), and subqueries
-- Aggregations, conditional logic, and data manipulation
-- Data quality checks and validation
-- Database design, tables, and relationships
-- Translating business requirements into SQL
-- Testing assumptions and investigating edge cases
+My approach is to understand the business problem first, establish the underlying requirements and data relationships, and then design, build and validate an appropriate solution.
 
 ## Projects
 
-### 1. Insurance Data Analysis
-*Planned*
+### 01 — BDX Runoff: Business Analysis & Data Design
 
-A business-focused project exploring insurance data, database relationships, data quality, and SQL analysis through practical scenarios.
+An insurance settlement and bordereau reporting project exploring how a complex financial process can be translated into structured business requirements, database design and controlled reporting.
 
-### 2. Business Questions to SQL
-*Planned*
+Key areas include:
+- Business requirements and acceptance criteria
+- Process mapping and workflow design
+- Relational database design and entity relationships
+- SQL-based validation and reconciliation
+- Paid bordereau processing and settlement controls
 
-A collection of business questions demonstrating how requirements are translated into SQL queries, with explanations of the logic, assumptions, and results.
+[View Project 01](./01-bdx-runoff/)
 
-### 3. Database Management
-*Planned*
+### 02 — Insurance Portfolio Analytics
 
-Practical examples of creating tables, defining columns, managing records, and maintaining data integrity.
+A relational database and analytics project focused on insurance policies, premiums, claims, brokers, binders and underwriting performance.
 
-## Tools & Technologies
+The project explores how insurance data can be structured to support portfolio reporting, business analysis and management information.
 
-- SQL
+Key areas include:
+- Relational database design and SQL
+- Policy, premium and claims analysis
+- Broker and underwriting performance
+- Renewals and year-on-year analysis
+- Commission, brokerage and loss ratio reporting
+- Data quality and validation
+
+[View Project 02](./02-insurance-portfolio-analytics/)
+
+### 03 — GadgetClient: Data Mapping & Process Automation
+
+A proof-of-concept solution designed to automate the processing of client-supplied data files through configurable mapping, standardisation, validation and reporting workflows.
+
+The project explores how a repeatable data-processing framework can reduce manual intervention, improve consistency and provide better operational controls.
+
+Key areas include:
+- Configurable client data mapping
+- Automated file processing
+- Data standardisation and validation
+- Exception handling and controlled reprocessing
+- Bordereau and reporting outputs
+- Process automation and system design
+
+[View Project 03](./03-gadgetclient-data-mapping/)
+
+## Skills & Technologies
+
+**Business Analysis**
+- Requirements elicitation and documentation
+- Process mapping and workflow design
+- Functional requirements and acceptance criteria
+- Stakeholder engagement and solution design
+
+**Data & Analytics**
+- SQL query development and problem-solving
+- Joins, CTEs, subqueries and window functions
+- Aggregations, conditional logic and data manipulation
+- Data quality, reconciliation and validation
+- Database design, relationships and data modelling
+
+**Tools & Technologies**
+- MySQL
+- Python
 - GitHub
-- Database tools and environments to be documented as projects develop
+- Power BI
 
-## Learning Approach
+## Approach
 
-Each project will focus on understanding the business problem, designing a suitable solution, writing and testing SQL, and explaining the results.
+Each project starts with a business problem and works towards a practical solution.
 
-This portfolio will evolve as I continue to develop my SQL and analytical capabilities.
+I aim to demonstrate not only the technical implementation, but also the reasoning behind the design decisions, the business rules involved, the controls required and how the resulting solution supports the wider business process.
+
+This portfolio will continue to evolve as I develop and document further projects.
