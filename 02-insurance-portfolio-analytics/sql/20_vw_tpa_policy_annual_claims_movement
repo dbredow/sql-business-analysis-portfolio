@@ -1,0 +1,10 @@
+Create view vw_tpa_policy_annual_claims_movement as
+select
+	PolicyReference,
+    Reportingyear,
+    sum(paidamount) as TotalClaimsPaidAmount,
+    sum(recoveryamount) as TotalClaimsRecoveryAmoun,
+    sum(paidamount - recoveryamount) as IncurredAmount
+from claimsdeclaration 
+group by PolicyReference, ReportingYear
+order by policyreference, reportingyear asc
