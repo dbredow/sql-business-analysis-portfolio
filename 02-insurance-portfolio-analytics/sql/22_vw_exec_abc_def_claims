@@ -1,0 +1,32 @@
+create view vw_exec_abc_def_claims as
+WITH DEFClaimCalc AS (
+    SELECT
+        ReportingYear,
+        SUM(DEFNetPaidClaims) AS DEFNetPaidClaims,
+        sum(DEFNetPaidLossRatio) as DEFNetPaidLossRatio
+    FROM def_third_party_broking.vw_br_reportingyr_loss_ratio
+    GROUP BY ReportingYear
+),
+
+ ABCClaimCalc AS (
+    SELECT
+        ReportingYear,
+        SUM(ABCTotalNetPaidClaims) AS ABCTotalNetPaidClaims,
+        sum(ABCNetPaidLossRatio) as ABCNetPaidLossRatio
+    FROM ghi_inhouse_claims.vw_uw_loss_ratio
+    GROUP BY ReportingYear
+)
+select
+	abc.Reportingyear,
+    abc.ABCTotalNetPaidClaims,
+    def.DEFNetPaidClaims,
+    abc.ABCTotalNetPaidClaims + def.DEFNetPaidClaims as CombinedNetPaidClaims,
+    abc.ABCNetPaidLossRatio,
+    def.DEFNetPaidLossRatio,
+    abc.ABCNetPaidLossRatio + def.DEFNetPaidLossRatio as CombinedNetPaidLossRatio
+
+from  ABCClaimCalc abc
+left join DEFClaimCalc def 
+on abc.reportingyear = def.reportingyear
+
+Group by ReportingYear
