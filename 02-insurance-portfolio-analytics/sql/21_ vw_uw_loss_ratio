@@ -1,0 +1,18 @@
+Create view vw_uw_loss_ratio as
+with ABCClaimCalc as (
+	select
+		Policyid,
+        sum(totalincurred) as TotalIncurred
+from ghi_inhouse_claims.vw_uw_claim_financials
+group by Policyid)
+
+Select 
+	p.reportingyear,
+    sum(p.writtenpremium) as ABCTotalWrittenPremium,
+    SUM(COALESCE(acc.TotalIncurred, 0)) as TotalNetPaidClaims,
+    ROUND(SUM(COALESCE(acc.TotalIncurred, 0)) / NULLIF(SUM(p.WrittenPremium), 0) * 100, 2) AS ABCNetPaidLossRatio
+from abc_inhouse_premium.policy p
+left join ABCClaimCalc acc
+on p.policyid = acc.policyid
+
+Group by Reportingyear 	
