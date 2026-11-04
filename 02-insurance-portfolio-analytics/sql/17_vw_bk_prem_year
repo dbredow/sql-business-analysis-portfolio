@@ -1,0 +1,25 @@
+Create View vw_bk_prem_year as
+with PremCalc as (
+
+	select
+		Policyid,
+        sum(PremiumAmount) as TotalPremiumAmount
+
+	From premiumdeclaration
+    
+    Group by Policyid)
+
+select
+	b.Binderid,
+    b.Year as ReportingYear,
+    b.binderagreementname,
+    sum(pc.TotalPremiumAmount) as TotalPremiumAmount
+
+from	binders b
+left join policy p
+on p.binderid = b.binderid
+left join premcalc pc
+on p.policyid = pc.policyid
+
+
+Group by b.Year, b.binderagreementname
