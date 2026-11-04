@@ -1,0 +1,9 @@
+create view vw_br_Loss_Ratio as
+select
+	Reportingyear,
+    PolicyReference,
+    CoverholderName,
+    TotalPremiumAmount,
+    IncurredAmount,
+    round(IncurredAmount / nullif(TotalPremiumAmount,0) * 100,2) as LossRatio
+From vw_br_policy_premium_claims_detail
