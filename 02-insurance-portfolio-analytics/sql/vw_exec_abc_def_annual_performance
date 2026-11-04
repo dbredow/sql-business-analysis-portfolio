@@ -1,0 +1,32 @@
+create view vw_exec_abc_def_annual_performance as
+WITH DEFFinancialCalc AS (
+    SELECT
+        ReportingYear,
+        SUM(TotalPremiumAmount) AS Total3TPPremium,
+        SUM(TotalBrokerage) AS Total3TPBrokerage
+    FROM def_third_party_broking.vw_br_prem_performance
+    GROUP BY ReportingYear
+),
+
+ ABCFinancialCalc AS (
+    SELECT
+        ReportingYear,
+        SUM(WrittenPremium) AS TotalUWPremium,
+        SUM(BrokerageAmount) AS TotalUWBrokerage
+    FROM abc_inhouse_premium.vw_uw_commission_brokerage
+    GROUP BY ReportingYear
+)
+select
+	abc.Reportingyear,
+    abc.TotalUWPremium,
+    def.Total3TPPremium,
+    abc.TotalUWPremium + def.Total3TPPremium as TotalWrittenPremium,
+    abc.TotalUWBrokerage,
+	def.Total3TPBrokerage,
+	abc.TotalUWBrokerage + def.Total3TPBrokerage as TotalBrokerage
+from  ABCFinancialCalc abc
+left join DEFFinancialCalc def
+on abc.reportingyear = def.reportingyear
+
+Group by ReportingYear
+    
