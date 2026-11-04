@@ -1,0 +1,29 @@
+create view vw_br_premium_handler as
+with PremCalc as (
+
+	select
+		Policyid,
+        sum(PremiumAmount) as TotalPremiumAmount
+
+	From premiumdeclaration
+    
+    Group by Policyid)
+
+select
+	h.handlername,
+    b.Year as ReportingYear,
+    sum(pc.TotalPremiumAmount) as TotalPremiumAmount,
+    count(distinct p.policyid) as PolicyCount,
+    round(sum(pc.TotalPremiumAmount * b.brokeragepct) / 100,2) as TotalBrokerage
+   
+
+from	binders b
+left join policy p
+on p.binderid = b.binderid
+left join premcalc pc
+on p.policyid = pc.policyid
+left join handler h
+on b.handlerid = h.handlerid
+
+Group by b.Year, h.handlername
+order by h.Handlername
