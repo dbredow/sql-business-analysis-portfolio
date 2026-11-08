@@ -1,5 +1,24 @@
 # Business Analysis & Data Portfolio
 
+## Personal Website
+
+This repository also contains my professional portfolio website in [index.html](./index.html). The site introduces my business analysis and data experience, selected insurance projects, professional background and contact links.
+
+### Publish with GitHub Pages
+1. Open this repository's **Settings → Pages**.
+2. Under **Build and deployment**, select **Deploy from a branch**.
+3. Choose branch `main` and folder `/ (root)`, then save.
+4. GitHub will display the published website address in the Pages settings. The expected project-site address is `https://dbredow.github.io/sql-business-analysis-portfolio/`.
+
+### Activate the contact form
+The form layout is in place, but it will not receive messages until connected to a form provider.
+1. Create a form at [Formspree](https://formspree.io/) and set the notification destination to the email address you want to use.
+2. Copy its endpoint (for example, `https://formspree.io/f/xxxxxxxx`).
+3. In `index.html`, replace `https://formspree.io/f/YOUR_FORM_ID` in the form's `action` attribute with your endpoint.
+4. Commit the change and submit a test enquiry after the site is published.
+
+The dashboard illustration on the website is a design concept, not live portfolio data or a claim of client results.
+
 ## About This Portfolio
 
 Welcome to my portfolio, showcasing practical work across business analysis, database design, data management, process improvement and data analytics.
