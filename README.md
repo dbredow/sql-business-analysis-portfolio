@@ -74,7 +74,7 @@ Key areas include:
 - Bordereau and reporting outputs
 - Process automation and system design
 
-[View Project 03](./03-gadgetclient-data-mapping/)
+[View Project 03](./03-gadgetclient-data-mapping.md)
 
 ## Skills & Technologies
 
