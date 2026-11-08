@@ -1,0 +1,34 @@
+create view vw_exec_abc_Broker_Benchmark_Performance as 
+with AveragePremCalc as ( 
+select
+	reportingyear,
+    avg(writtenpremium) as AverageWrittenpremium
+from policy 
+group by reportingyear),
+
+AverageFinalCalc as (
+select
+	vw.brokername,
+    apc.reportingyear,
+    vw.totalwrittenpremium,
+    round(vw.avgpolicywrittenpremium,2) as AverageWrittenPremium,
+    round(apc.AveragewrittenPremium,2) as BusinessAveragePremium,
+	round(vw.avgpolicywrittenpremium - nullif(apc.AverageWrittenPremium,0),2) as AVGPremiumVariance,
+    round((vw.avgpolicywrittenpremium - apc.AveragewrittenPremium) / nullif(apc.AveragewrittenPremium,0) *100,2) as PCTVariance
+    
+from abc_inhouse_premium.vw_uw_broker_performance vw
+join AveragePremCalc apc
+on vw.reportingyear = apc.reportingyear)
+
+select
+	Brokername,
+    Reportingyear,
+    Averagewrittenpremium, 
+    Businessaveragepremium,
+    Avgpremiumvariance, 
+    PCTVariance,
+    case WHEN PCTVariance IS NULL THEN 'Not Rated'
+		 when pctvariance < 0 then 'Immediate Review'
+		 when pctvariance < 5 then 'Monitor'
+         else 'Good' end as PCTVarianceRating
+from AverageFinalCalc
