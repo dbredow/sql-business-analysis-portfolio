@@ -76,6 +76,19 @@ Key areas include:
 
 [View Project 03](./03-gadgetclient-data-mapping.md)
 
+### 04 — Insurance Data Cleansing & Standardisation
+
+A practical data-quality project using a 100-row synthetic insurance policy dataset from two source systems. The project focuses on profiling raw data, validating dates and financial fields, standardising values through explicit rules, managing exceptions and reconciling outputs.
+
+Key areas include:
+- Raw data profiling and completeness checks
+- Date-format recognition and calendar validation
+- Premium, commission and reference-data standardisation
+- Staging, validation and exception management
+- Data lineage, reconciliation and migration-ready outputs
+
+[View Project 04](./04-insurance-data-cleansing/)
+
 ## Skills & Technologies
 
 **Business Analysis**
