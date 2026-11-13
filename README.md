@@ -76,16 +76,19 @@ Key areas include:
 
 [View Project 03](./03-gadgetclient-data-mapping.md)
 
-### 04 — Insurance Data Cleansing & Standardisation
+### 04 — Insurance Data Cleansing Pipeline
 
-A practical data-quality project using a 100-row synthetic insurance policy dataset from two source systems. The project focuses on profiling raw data, validating dates and financial fields, standardising values through explicit rules, managing exceptions and reconciling outputs.
+An end-to-end SQL project building a repeatable, auditable pipeline to transform raw insurance policy data into validated, reporting- or migration-ready outputs.
+
+The project covers the full data lifecycle: raw ingestion, profiling, business-rule definition, standardisation, staging, validation, exception management, clean loading, reconciliation and safe batch reruns.
 
 Key areas include:
-- Raw data profiling and completeness checks
-- Date-format recognition and calendar validation
-- Premium, commission and reference-data standardisation
-- Staging, validation and exception management
-- Data lineage, reconciliation and migration-ready outputs
+- Raw data profiling across multiple source systems
+- Business-approved cleansing and transformation rules
+- Premium, commission, date, currency and reference-data validation
+- Staging and clean database layers
+- Exception management and data lineage
+- Batch processing, idempotency and reconciliation
 
 [View Project 04](./04-insurance-data-cleansing/)
 
