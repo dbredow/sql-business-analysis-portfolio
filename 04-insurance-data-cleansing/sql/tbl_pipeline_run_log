@@ -1,0 +1,12 @@
+create table pipeline_run_log (
+	PipelineRunID int primary key auto_increment,
+    RunStartTime datetime not null,
+    RunCompleteTime datetime null,
+    Outcome VARCHAR(30) NOT NULL DEFAULT 'Running' CHECK (Outcome IN ('Running', 'Passed', 'Failed','CompletedWithExceptions')),
+    RecordsProcessed int not null default 0 check (RecordsProcessed >=0),
+    RecordsPassed int not null default 0  check (RecordsPassed >=0),
+    RecordsWithExceptions int not null default 0 check (RecordsWithExceptions >=0),
+    
+CONSTRAINT chk_complete_after_start
+CHECK (RunCompleteTime > RunStartTime))
+    
