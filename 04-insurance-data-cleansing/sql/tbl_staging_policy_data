@@ -1,0 +1,18 @@
+create table Staging_Policy_Data (
+	RawRecordID int primary key,
+    SourceSystem varchar(30),
+    SourcePolicyID varchar(30),
+    PolicyReference varchar(50),
+    BrokerName varchar(100),
+    InsuredName varchar(150),
+    PolicyStatus varchar(30),
+    InceptionDateRaw varchar(50),
+    ExpiryDateRaw varchar(50),
+    WrittenPremiumRaw varchar(50),
+    CurrencyCodeRaw varchar(10),
+    CommissionPctRaw varchar(30),
+    ReportingYearRaw varchar(20),
+    CountryRaw varchar(100),
+    ImportBatchID int,
+    ImportedAt datetime,
+    LastProcessedAt datetime)
