@@ -1,0 +1,24 @@
+create table clean_policy_data (
+	CleanRecordID int primary key auto_increment,
+    RawRecordID int unique not null,
+    SourceSystem varchar(30) not null,
+    SourcePolicyID varchar(30) not null,
+    PolicyReference varchar(50) not null,
+    BrokerName varchar(100) not null,
+    InsuredName varchar(100) not null,
+    PolicyStatus varchar(30) not null,
+    InceptionDate date not null,
+    ExpiryDate date not null,
+    WrittenPremium decimal(15,2) not null check (WrittenPremium >=0),
+    CurrencyCode varchar(3)  not null,
+    CommissionPct decimal(5,2)  not null default 0.00 check (CommissionPct between 0 and 100),
+    ReportingYear smallint  not null,
+    Country varchar(100) not null,
+    ImportBatchID VARCHAR(30) NOT NULL,
+	ImportedAt DATETIME NOT NULL,
+    
+    CONSTRAINT chk_expiry_after_inception
+    CHECK (ExpiryDate > InceptionDate),
+    
+    constraint FK_raw_policy_data_RawRecordID
+    foreign Key (RawRecordID) references raw_policy_data(RawRecordID))
