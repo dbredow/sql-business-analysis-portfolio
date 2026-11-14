@@ -1,0 +1,21 @@
+create table data_quality_exceptions (
+	ExceptionID int primary key	auto_increment,
+    PipelineRunID int not null,
+    RawRecordID int not null,
+    FieldName varchar(100) not null,
+    OriginalValue varchar(500) not null,
+    ExceptionType varchar(50) not null,
+    ExceptionDescription varchar(500),
+    ExceptionStatus varchar (30) not null default 'Outstanding' CHECK (ExceptionStatus IN ('Outstanding', 'Resolved', 'Closed')),
+    RaisedAt datetime not null,
+    ResolvedAt datetime,
+    ResolvedBy varchar(100),
+    ResolutionNotes varchar(500),
+    
+    CONSTRAINT fk_exception_run
+    FOREIGN KEY (PipelineRunID)
+    REFERENCES pipeline_run_log(PipelineRunID),
+
+	CONSTRAINT fk_exception_raw
+    FOREIGN KEY (RawRecordID)
+    REFERENCES raw_policy_data(RawRecordID))
