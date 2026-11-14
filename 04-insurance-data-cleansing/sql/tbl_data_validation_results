@@ -1,0 +1,22 @@
+create table data_validation_results (
+	ValidationResultID int primary key auto_increment,
+    PipelineRunID int not null,
+    RawRecordID int not null,
+    SourceSystemStatus VARCHAR(20) NOT NULL CHECK (SourceSystemStatus IN ('Pending', 'Valid', 'Exception')),
+    SourcePolicyStatus VARCHAR(20) NOT NULL CHECK (SourcePolicyStatus IN ('Pending', 'Valid', 'Exception')),
+	PolicyReferenceStatus VARCHAR(20) NOT NULL CHECK (PolicyReferenceStatus IN ('Pending', 'Valid', 'Exception')),
+    BrokerNameStatus VARCHAR(20) NOT NULL CHECK (BrokerNameStatus IN ('Pending', 'Valid', 'Exception')),
+    InsuredNameStatus VARCHAR(20) NOT NULL CHECK (InsuredNameStatus IN ('Pending', 'Valid', 'Exception')),
+    PolicyStatus VARCHAR(20) NOT NULL CHECK (PolicyStatus IN ('Pending', 'Valid', 'Exception')),
+    InceptionDateStatus VARCHAR(20) NOT NULL CHECK (InceptionDateStatus IN ('Pending', 'Valid', 'Exception')),
+    ExpiryDateStatus VARCHAR(20) NOT NULL CHECK (ExpiryDateStatus IN ('Pending', 'Valid', 'Exception')),
+    WrittenPremiumStatus VARCHAR(20) NOT NULL CHECK (WrittenPremiumStatus IN ('Pending', 'Valid', 'Exception')),
+    CurrencyCodeStatus VARCHAR(20) NOT NULL CHECK (CurrencyCodeStatus IN ('Pending', 'Valid', 'Exception')),
+    CommissionPctStatus VARCHAR(20) NOT NULL CHECK (CommissionPctStatus IN ('Pending', 'Valid', 'Exception')),
+    ReportingYearStatus VARCHAR(20) NOT NULL CHECK (ReportingYearStatus IN ('Pending', 'Valid', 'Exception')),
+    CountryStatus VARCHAR(20) NOT NULL CHECK (CountryStatus IN ('Pending', 'Valid', 'Exception')),
+    ValidatedAt DATETIME NOT NULL,
+    
+    CONSTRAINT uq_run_policy
+    UNIQUE (PipelineRunID, RawRecordID))
+    
