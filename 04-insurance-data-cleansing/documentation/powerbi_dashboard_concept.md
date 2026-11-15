@@ -26,43 +26,68 @@ This document describes a proposed dashboard design. It is a design concept, not
 | 4. Reconciliation | Can every source record be accounted for? | Raw, staging, field validation, whole-policy and clean counts |
 | 5. Pipeline & Audit | What happened in each processing run? | Run history, duration, outcome and exception movements |
 
-## Page 1 — Executive Overview (wireframe)
+## Page 1 — Executive Overview (dashboard example)
 
-The following is a conceptual layout. Figures shown are the current Written Premium field results only, not whole-policy cleanliness.
+The example below shows the proposed visual hierarchy and colour treatment. It uses the current Written Premium field results as the only completed field. It is a design mock-up, not a live report or a claim that the whole policy dataset is 94% clean.
 
-| KPI card | Illustrative current value | Definition |
-|---|---:|---|
-| Source records | 100 | Records imported into the source batch |
-| Written Premium valid | 94 | Records passing the current Written Premium rule |
-| Written Premium outstanding | 6 | Records still failing Written Premium validation |
-| Written Premium validation rate | 94% | 94 valid / 100 assessed |
-
-Suggested visual layout:
+### Example dashboard wireframe
 
 ```text
-+------------------------------------------------------------------+
-| INSURANCE DATA CLEANSING                         Run: 1 | Refresh |
-+------------------+------------------+----------------+------------+
-| Source records   | Premium valid    | Outstanding    | Pass rate  |
-|       100        |       94         |       6        |    94%     |
-+------------------+------------------+----------------+------------+
-|                                                                  |
-| Field validation progress                                        |
-| Written Premium  [##############################------] 94%     |
-| CurrencyCode     [                  Pending                  ]  |
-| CommissionPct    [                  Pending                  ]  |
-| Dates             [                  Pending                  ]  |
-| Country           [                  Pending                  ]  |
-|                                                                  |
-+--------------------------------+---------------------------------+
-| Outstanding exceptions        | Pipeline run status             |
-| Blank values             2    | Run outcome / start / finish     |
-| TBC placeholders         2    | Records processed                |
-| Whitespace               2    | Last refresh timestamp           |
-+--------------------------------+---------------------------------+
+┌────────────────────────────────────────────────────────────────────────────┐
+│  INSURANCE DATA QUALITY                                      PIPELINE RUN 1 │
+│  Cleansing progress                                      Last refresh: —   │
+├──────────────────┬──────────────────┬──────────────────┬───────────────────┤
+│  SOURCE RECORDS  │  FIELDS ASSESSED  │  PREMIUM VALID   │  PREMIUM ISSUES   │
+│       100        │       1 / 8      │       94         │        6          │
+│                  │                  │      94%         │       6%          │
+├────────────────────────────────────────────────────────────────────────────┤
+│  FIELD VALIDATION PROGRESS                                                  │
+│                                                                            │
+│  Written Premium  🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟥🟥  94% │
+│                    94 Valid                                  6 Outstanding │
+│                                                                            │
+│  CurrencyCode      ⬜ Not started                                          │
+│  CommissionPct     ⬜ Not started                                          │
+│  InceptionDate     ⬜ Not started                                          │
+│  ExpiryDate        ⬜ Not started                                          │
+│  ReportingYear     ⬜ Not started                                          │
+│  Country           ⬜ Not started                                          │
+├─────────────────────────────────────┬──────────────────────────────────────┤
+│  WRITTEN PREMIUM EXCEPTIONS         │  PIPELINE CONTROL                    │
+│                                     │                                      │
+│  Resolved       17  🟩               │  Records in batch          100      │
+│  Outstanding    6  🟥               │  Written Premium assessed  100      │
+│                                     │  Run outcome          In progress*   │
+│  Blank           2                  │                                      │
+│  TBC             2                  │  *Illustrative label; use actual    │
+│  Whitespace      2                  │   pipeline_run_log outcome in report│
+└─────────────────────────────────────┴──────────────────────────────────────┘
 ```
 
-The progress bars for fields not yet processed should show Pending / Not started, not 0% valid. A 0% result would imply the field had been assessed and no records passed.
+### Colour and status rules
+
+| Colour / display | Meaning | Dashboard treatment |
+|---|---|---|
+| Green | Valid / completed | Count of records passing the field rule |
+| Red | Outstanding exception | Count of records failing the field rule and still requiring attention |
+| Grey | Pending / not started | Field has not yet been assessed; do not treat as a zero-percent pass rate |
+| Amber (optional) | Awaiting business decision | Exception is under investigation or awaiting approval |
+
+For Written Premium, the validation bar represents 94 Valid and 6 Exception out of 100 assessed records. The 17 resolved items are shown separately as exception workflow history; they are not added to the current 94/6 validation split.
+
+### KPI definitions for the example
+
+| KPI | Example value | Definition |
+|---|---:|---|
+| Source records | 100 | Records in the imported batch |
+| Fields assessed | 1 of 8 | Illustrative count of fields with a completed validation cycle; confirm final required-field list |
+| Written Premium valid | 94 | Records currently passing the Written Premium format rule |
+| Written Premium outstanding | 6 | Records currently failing the Written Premium format rule |
+| Written Premium validation rate | 94% | 94 / 100 assessed Written Premium values |
+| Original exceptions resolved | 17 | Previously raised formatting exceptions that passed revalidation and were resolved |
+
+The dashboard should avoid a single overall “completion %” until we agree its precise meaning. We can show **field coverage** (how many required fields have been assessed) separately from **field validation rate** (how many records pass a particular field) and **whole-policy release rate** (how many complete policies pass every required rule).
+
 
 ## Page 2 — Field Validation
 
