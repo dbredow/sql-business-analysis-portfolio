@@ -38,31 +38,75 @@ This is a format check, not a business validation of whether a premium amount is
 
 The initial diagnostic profile identified examples of comma separators, currency-symbol/encoding artefacts, alphabetic content, empty strings and whitespace-only values. Diagnostic categories can overlap; they should not be added together as if they were mutually exclusive record counts.
 
+## Cleansing treatments applied
+
+The following deterministic formatting treatments were applied to the staging copy only:
+
+- Removed thousands-separator commas from eligible Written Premium values.
+- Removed the erroneous `Â£` symbol/encoding artefact from eligible Written Premium values.
+- Kept the raw source table unchanged.
+- Did not infer or change CurrencyCode as part of Written Premium cleansing.
+
+These treatments standardised the text representation. They did not establish whether a premium amount was commercially correct or whether the associated currency was correct.
+
+## Current validation and exception outcome
+
+After the staging treatments, the Written Premium validation rule was rerun for all 100 records.
+
+| Current outcome | Records | Share |
+|---|---:|---:|
+| Valid | 94 | 94% |
+| Exception | 6 | 6% |
+| **Total** | **100** | **100%** |
+
+Of the original 23 exceptions:
+- 17 formatting exceptions passed revalidation and were marked Resolved in the exception register.
+- 6 remain Outstanding.
+
+The six outstanding records are:
+
+| RawRecordID | Original value | Observed issue |
+|---:|---|---|
+| 18 | Blank | Missing value |
+| 24 | `TBC` | Placeholder requiring confirmation |
+| 31 | Whitespace | Whitespace-only value |
+| 67 | Blank | Missing value |
+| 85 | `TBC` | Placeholder requiring confirmation |
+| 94 | Whitespace | Whitespace-only value |
+
+The six records remain exceptions. No zero value or other replacement premium has been assumed. Any replacement requires an explicit business decision and supporting approval.
+
 ## Reconciliation
 
-`100 = 77 + 23`
+Initial profiling:
 
-This is the first field-level profiling reconciliation: all 100 records are classified for the Written Premium field.
+`100 = 77 initially format-valid + 23 initially format-exception`
+
+After staging standardisation and revalidation:
+
+`100 = 94 Valid + 6 Exception`
+
+Exception movement:
+
+`23 original exceptions = 17 resolved after revalidation + 6 outstanding`
+
+These are field-level Written Premium results. They do not mean that 94 complete policies are ready for the final clean table. A policy enters `clean_policy_data` only after all required fields and business rules pass.
 
 ## Processing and audit treatment
 
-For the validation run:
-
-- Every source record receives a Written Premium status in `data_validation_results`.
+- Every source record receives a Written Premium status in `data_validation_results` for the pipeline run.
 - Values matching the agreed expression are marked `Valid`.
 - Values not matching the expression are marked `Exception`.
-- Each failed field is represented in `data_quality_exceptions`, retaining its original value and exception reason.
+- Failed field values are represented in `data_quality_exceptions`, retaining the original value and exception reason.
+- The 17 formatting exceptions were marked Resolved only after their updated staging values passed revalidation.
+- The six unresolved values remain Outstanding for investigation.
 - Raw source values remain unchanged.
-- The 77 format-valid values are not, by themselves, 77 fully cleansed policies. A policy enters `clean_policy_data` only after all required fields and business rules pass.
-
-## Status and evidence
-
-The 77/23 figures above are the initial profiling outcome. The execution status of the routing script and its post-run database reconciliation must be recorded separately after that script has been run and its results checked.
+- Validation status and exception resolution are separate controls.
 
 ## Next steps
 
-1. Execute the Written Premium validation and exception-routing script.
-2. Verify 77 `Valid` and 23 `Exception` statuses for the run.
-3. Verify that 23 Written Premium exception records were created, with no unintended exceptions for other fields.
-4. Investigate and resolve the Written Premium exceptions using evidence and approved business rules.
-5. Revalidate Written Premium before moving to the next field.
+1. Investigate the six outstanding Written Premium values and obtain business evidence or an approved disposition.
+2. Profile CurrencyCode as the next field, treating currency code as separate from premium text formatting.
+3. Agree CurrencyCode standardisation and validation rules before applying transformations.
+4. Continue the field-by-field validation process.
+5. Only after all required fields pass, classify whole policies and load eligible records into the final clean table.
