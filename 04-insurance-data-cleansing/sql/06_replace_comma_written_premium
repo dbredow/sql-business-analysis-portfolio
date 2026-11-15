@@ -1,0 +1,6 @@
+Start transaction;
+
+update staging_policy_data 
+	set writtenpremiumraw = replace(writtenpremiumraw, ',', '') 
+where writtenpremiumraw regexp ','
+	and writtenpremiumraw NOT REGEXP '[^0-9.,]'
