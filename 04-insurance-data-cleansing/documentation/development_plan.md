@@ -106,7 +106,7 @@ Planned pages:
 4. Reconciliation
 5. Pipeline & Audit
 
-See [Power BI Dashboard Concept](./powerbi_dashboard_concept.md) for the proposed layout and measures.
+See [Power BI Dashboard Concept](./powerbi_reporting.md) for the proposed layout and measures.
 
 ## Workstream 5 — Final release and QA
 
