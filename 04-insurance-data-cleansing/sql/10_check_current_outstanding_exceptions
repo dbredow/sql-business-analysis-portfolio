@@ -1,0 +1,12 @@
+select
+	exceptionid,
+    rawrecordid,
+    originalvalue,
+    exceptiontype,
+    ExceptionDescription,
+    Exceptionstatus
+From data_quality_exceptions
+where PipelineRunID = 1
+	and fieldname = 'WrittenPremium'
+    and exceptionstatus = 'outstanding'
+order by RawRecordID
