@@ -72,7 +72,7 @@ Supporting controls include `pipeline_run_log` and `data_validation_results`. SQ
 - [Cleansing process map](./documentation/cleansing_process.md)
 - [Use Case 01 — Written Premium validation](./documentation/use_case_01_written_premium.md)
 - [Development plan and delivery roadmap](./documentation/development_plan.md)
-- [Power BI dashboard concept](./documentation/powerbi_dashboard_concept.md)
+- [Power BI reporting](./documentation/powerbi_reporting.md)
 
 The ERD describes the current logical relationships and distinguishes implemented objects from planned extensions. The process map shows the end-to-end workflow, including exception investigation, business decisions, revalidation and final release.
 
@@ -177,7 +177,7 @@ Examples of deterministic technical treatments include trimming whitespace or up
 
 ## Power BI dashboard
 
-The proposed Power BI dashboard is documented in [Power BI Dashboard Concept](./documentation/powerbi_dashboard_concept.md). It will include:
+The proposed Power BI dashboard is documented in [Power BI Reporting](./documentation/powerbi_reporting.md). It will include:
 - Executive overview of records processed, field-level quality and outstanding exceptions.
 - Field-by-field validation progress.
 - Exception analysis and resolution history.
