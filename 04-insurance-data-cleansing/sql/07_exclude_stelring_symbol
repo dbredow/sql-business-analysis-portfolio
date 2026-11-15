@@ -1,0 +1,7 @@
+Start transaction;
+
+update staging_policy_data 
+	set writtenpremiumraw = replace (writtenpremiumraw, 'Â£', '') 
+where writtenpremiumraw regexp 'Â£'
+
+-- also have to run 06_replace_comma_written_premium as the the sterling symbol values had commas
