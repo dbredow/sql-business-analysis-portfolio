@@ -1,0 +1,13 @@
+SELECT
+    E.ExceptionID,
+    E.RawRecordID,
+    E.OriginalValue,
+    V.WrittenPremiumStatus
+FROM data_quality_exceptions AS E
+JOIN data_validation_results AS V
+    ON E.RawRecordID = V.RawRecordID
+   AND E.PipelineRunID = V.PipelineRunID
+WHERE E.PipelineRunID = 1
+  AND E.FieldName = 'WrittenPremium'
+  AND E.ExceptionStatus = 'Outstanding'
+  AND V.WrittenPremiumStatus = 'Valid';
