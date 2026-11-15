@@ -2,11 +2,11 @@
 
 ## Project overview
 
-Build a repeatable, auditable SQL data-cleansing pipeline for insurance policy data received from multiple source systems.
+Build a repeatable, auditable SQL data-cleansing pipeline for insurance policy data received from multiple source systems, with a Power BI dashboard to monitor data quality, exceptions and reconciliation.
 
 The project uses a 100-row synthetic policy dataset containing deliberately inconsistent, incomplete and potentially invalid values. The objective is to transform raw inputs into validated, reporting- or migration-ready outputs without losing source evidence or silently inventing business answers.
 
-This is an end-to-end business and data project covering data profiling, database design, validation, exception management, controlled resolution, reconciliation and auditability.
+This is an end-to-end business and data project covering data profiling, database design, validation, exception management, controlled resolution, reconciliation, auditability and data-quality reporting.
 
 All dataset records are synthetic.
 
@@ -19,6 +19,7 @@ All dataset records are synthetic.
 - Route invalid or ambiguous values into an auditable exception workflow.
 - Release only fully validated policy records to the final clean output.
 - Reconcile records and retain evidence of each pipeline run.
+- Present data-quality progress and control outcomes through Power BI.
 
 ## Dataset
 
@@ -30,7 +31,7 @@ The data deliberately includes inconsistent formats, mixed case and spacing, mis
 
 `raw_policy_data` → `Staging_Policy_Data` → validation and exception management → `clean_policy_data`
 
-Supporting controls include `pipeline_run_log` and `data_validation_results`.
+Supporting controls include `pipeline_run_log` and `data_validation_results`. SQL reporting views will provide the Power BI reporting layer.
 
 ### 1. Raw data
 
@@ -50,6 +51,7 @@ Supporting controls include `pipeline_run_log` and `data_validation_results`.
 - `data_quality_exceptions` records the fields requiring investigation, including original values and exception reasons.
 - Validation outcomes and exception investigation are separate concerns.
 - Business decisions are required where a value cannot safely be inferred.
+- Resolved exceptions remain in the register as audit history.
 
 ### 4. Final clean output
 
@@ -57,17 +59,20 @@ Supporting controls include `pipeline_run_log` and `data_validation_results`.
 - Passing one field does not make an entire policy clean.
 - Source lineage is retained through the source record key.
 
-### 5. Run control and reconciliation
+### 5. Run control, reconciliation and reporting
 
 - `pipeline_run_log` records one row per pipeline execution.
 - Field-level and whole-policy reconciliation are reported separately.
 - Reruns must be controlled so they do not create duplicates or damage prior audit evidence.
+- Power BI will consume purpose-built SQL views and refresh as the underlying pipeline progresses.
 
 ## Data model and process documentation
 
 - [Data model and ERD](./documentation/data_model.md)
 - [Cleansing process map](./documentation/cleansing_process.md)
 - [Use Case 01 — Written Premium validation](./documentation/use_case_01_written_premium.md)
+- [Development plan and delivery roadmap](./documentation/development_plan.md)
+- [Power BI dashboard concept](./documentation/powerbi_dashboard_concept.md)
 
 The ERD describes the current logical relationships and distinguishes implemented objects from planned extensions. The process map shows the end-to-end workflow, including exception investigation, business decisions, revalidation and final release.
 
@@ -89,13 +94,25 @@ The initial profile of 100 records identified:
 | Does not match agreed numeric format | 23 | 23% |
 | **Total** | **100** | **100%** |
 
-Field-level profiling reconciliation:
+The initial exceptions included comma thousands separators, erroneous `Â£` symbol/encoding artefacts, blank values, whitespace-only values and `TBC` placeholders.
 
-`100 = 77 + 23`
+### Current Written Premium position
 
-This is a field-level result, not a claim that 77 complete policies are ready for the final clean table. Other required fields must pass validation before a policy can be released as clean.
+After applying the agreed formatting treatments in staging and rerunning validation:
 
-The detailed use case records the rule, profiling observations, audit treatment and next steps. The 77/23 figures are identified as profiling results; post-execution routing counts are to be verified separately after the validation script is run.
+| Current field status | Records | Share |
+|---|---:|---:|
+| Valid | 94 | 94% |
+| Exception | 6 | 6% |
+| **Total** | **100** | **100%** |
+
+Of the original 23 exception records:
+- 17 were standardised in staging, passed revalidation and were marked Resolved in the exception register.
+- 6 remain Outstanding: two blank values, two `TBC` placeholders and two whitespace-only values.
+
+The six outstanding records have not been replaced with zero or another assumed premium. Any such treatment requires an explicit business decision and supporting approval.
+
+This is a **Written Premium field-level result only**. It does not mean 94 policies are fully cleansed or ready for the final clean table. Other required fields must pass validation before a policy can be released as clean.
 
 ## Design principles and governance
 
@@ -106,6 +123,7 @@ The detailed use case records the rule, profiling observations, audit treatment 
 - **Use the right grain:** a validation snapshot is one record per policy per run; an exception is one record per failed field per policy per run.
 - **Release complete records only:** the final clean table contains policies that have passed all required checks.
 - **Reconcile explicitly:** distinguish field-level outcomes from whole-policy outcomes.
+- **Report honestly:** dashboard measures must distinguish field-level validation from whole-policy cleanliness.
 
 Examples of deterministic technical treatments include trimming whitespace or uppercasing a recognised currency code. Replacing a missing currency, interpreting an ambiguous date or correcting a premium may require business confirmation.
 
@@ -119,6 +137,7 @@ Examples of deterministic technical treatments include trimming whitespace or up
 | `data_quality_exceptions` | Field-level exception register | Implemented |
 | `pipeline_run_log` | Pipeline execution and outcome log | Implemented |
 | `clean_policy_data` | Final fully validated policy output | Table created; loading follows complete validation |
+| SQL reporting views | Power BI reporting layer | Planned |
 | `data_cleansing_rules` | Formal rules register | Planned |
 | `data_cleansing_decisions` | Business-approved decisions and resolutions | Planned |
 
@@ -127,31 +146,45 @@ Examples of deterministic technical treatments include trimming whitespace or up
 ### Completed
 
 - Created the MySQL database and raw policy table.
-- Imported and confirmed 100 synthetic policy records.
+- Imported and confirmed 100 synthetic policy records from two source systems.
 - Created the staging table and loaded 100 working records.
 - Created the pipeline run log and initiated the first run.
 - Created the wide validation-results table with one row per source record per run.
 - Created the field-level exception register.
 - Created the final clean policy table with data integrity constraints.
 - Completed initial profiling of Written Premium.
-- Agreed the Written Premium format rule and identified 77 format-valid and 23 format-exception candidates.
-- Documented the initial data model, process map and first use case.
+- Agreed and applied the Written Premium formatting treatments in staging: removed thousands separators and the erroneous `Â£` symbol/encoding artefact.
+- Revalidated all 100 Written Premium values: 94 Valid and 6 Exception.
+- Resolved 17 formatting exceptions after successful revalidation.
+- Confirmed 6 outstanding Written Premium exceptions: two blank, two `TBC`, two whitespace-only.
+- Saved and labelled the SQL scripts documenting the execution sequence.
 
 ### Current stage
 
-**Written Premium — initial profiling completed; validation routing and exception investigation are the next execution steps.**
-
-The first use case will be closed only after the validation statuses and exception records have been written and reconciled against all 100 source records. The 23 exceptions will then be investigated and resolved using evidence and approved rules.
+**Written Premium — 94 Valid, 6 Outstanding exceptions.** The six outstanding records require investigation and a business decision; no replacement value has been assumed.
 
 ### Next stages
 
-1. Execute and verify Written Premium validation and exception routing.
-2. Investigate, resolve and revalidate the 23 Written Premium exceptions.
-3. Document the completed first use case and update the profiling evidence.
-4. Move to the next field only after the Written Premium cycle is reviewed.
-5. Continue field-by-field until all required policy fields pass.
-6. Load fully validated policies to the final clean table.
-7. Complete whole-policy reconciliation, rerun testing and end-to-end QA.
+1. Profile CurrencyCode, including whitespace, case, recognised ISO currency codes and unknown/placeholder values.
+2. Agree CurrencyCode cleansing and validation rules, distinguishing deterministic formatting from business decisions.
+3. Clean CurrencyCode in staging, revalidate and reconcile its exception register.
+4. Continue field-by-field through commission percentage, dates, reporting year, country and other required fields.
+5. Investigate the six outstanding Written Premium exceptions and record any approved business decision.
+6. Create SQL reporting views for pipeline progress, field validation, exception management and reconciliation.
+7. Connect Power BI to the MySQL reporting views and build the dashboard iteratively.
+8. Load fully validated policies to the final clean table.
+9. Complete whole-policy reconciliation, rerun testing and end-to-end QA.
+
+## Power BI dashboard
+
+The proposed Power BI dashboard is documented in [Power BI Dashboard Concept](./documentation/powerbi_dashboard_concept.md). It will include:
+- Executive overview of records processed, field-level quality and outstanding exceptions.
+- Field-by-field validation progress.
+- Exception analysis and resolution history.
+- Source-to-staging-to-clean reconciliation.
+- Pipeline run and audit monitoring.
+
+The dashboard is a planned reporting layer. It is not yet connected to MySQL, and the current Written Premium figures above are manually verified project results rather than live Power BI measures.
 
 ## Acceptance criteria
 
@@ -165,10 +198,11 @@ The project will be considered complete when:
 6. Field-level and whole-policy reconciliations are evidenced at the correct grain.
 7. Rerunning a batch does not create duplicate clean records or unintended changes.
 8. SQL scripts, rules, results and process documentation are committed to GitHub.
+9. Power BI measures reconcile to the SQL reporting layer and clearly distinguish field-level from whole-policy status.
 
 ## Skills and technologies
 
-MySQL, SQL development, regular expressions, string manipulation, data profiling, relational data modelling, ETL pipeline design, data validation, exception management, business-rule analysis, data lineage, reconciliation, batch processing and auditability.
+MySQL, SQL development, regular expressions, string manipulation, data profiling, relational data modelling, ETL pipeline design, data validation, exception management, business-rule analysis, data lineage, reconciliation, batch processing, auditability, Power BI data modelling and dashboard design.
 
 ## Repository structure
 
@@ -180,7 +214,7 @@ MySQL, SQL development, regular expressions, string manipulation, data profiling
 └── documentation/
     ├── data_model.md
     ├── cleansing_process.md
-    └── use_case_01_written_premium.md
+    ├── use_case_01_written_premium.md
+    ├── development_plan.md
+    └── powerbi_dashboard_concept.md
 ```
-
-SQL scripts, source data and evidence outputs will be added as the corresponding stages are completed and verified.
