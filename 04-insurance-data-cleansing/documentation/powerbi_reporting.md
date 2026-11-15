@@ -19,7 +19,7 @@ The proposed dashboard is designed around five reporting areas:
 The mock-up below illustrates the proposed visual direction. It is a design concept, not a live Power BI report.
 
 <p align="center">
-  <img src="./powerbi_dashboard_mockup.png" alt="Power BI insurance data cleansing dashboard mock-up" width="85%">
+  <img src="./powerbi_reporting/powerbi_dashboard_mockup.png" alt="Power BI insurance data cleansing dashboard mock-up" width="85%">
 </p>
 
 ## Reporting principles
