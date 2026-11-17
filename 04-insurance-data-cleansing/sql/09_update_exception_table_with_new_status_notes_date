@@ -1,13 +1,36 @@
+
+START TRANSACTION;
+
+INSERT INTO data_quality_exceptions
+(
+    PipelineRunID,
+    RawRecordID,
+    FieldName,
+    OriginalValue,
+    ExceptionType,
+    ExceptionDescription,
+    ExceptionStatus,
+    RaisedAt
+)
 SELECT
-    E.ExceptionID,
-    E.RawRecordID,
-    E.OriginalValue,
-    V.WrittenPremiumStatus
-FROM data_quality_exceptions AS E
-JOIN data_validation_results AS V
-    ON E.RawRecordID = V.RawRecordID
-   AND E.PipelineRunID = V.PipelineRunID
-WHERE E.PipelineRunID = 1
-  AND E.FieldName = 'WrittenPremium'
-  AND E.ExceptionStatus = 'Outstanding'
-  AND V.WrittenPremiumStatus = 'Valid';
+    V.PipelineRunID,
+    V.RawRecordID,
+    'CurrencyCode',
+    S.CurrencyCodeRaw,
+    'Invalid Reference',
+    'Currency Code does not exist in the Currency Lookup table.',
+    'Outstanding',
+    NOW()
+FROM data_validation_results V
+INNER JOIN staging_policy_data S
+    ON V.RawRecordID = S.RawRecordID
+WHERE V.PipelineRunID = 1
+  AND V.CurrencyCodeStatus = 'Exception'
+  AND NOT EXISTS
+  (
+      SELECT 1
+      FROM data_quality_exceptions E
+      WHERE E.PipelineRunID = V.PipelineRunID
+        AND E.RawRecordID = V.RawRecordID
+        AND E.FieldName = 'CurrencyCode'
+  );
